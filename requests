@@ -1,0 +1,57 @@
+# 1.Hacker News'ten En Üstteki 30 Haberi Çekme:
+import requests
+
+def get_top_news():
+    url = "https://hacker-news.firebaseio.com/v0/topstories.json"
+    response = requests.get(url)
+    top_story_ids = response.json()[:30]  # Sadece en üstteki 30 hikayeyi al
+
+    for story_id in top_story_ids:
+        story_url = f"https://hacker-news.firebaseio.com/v0/item/{story_id}.json"
+        story_response = requests.get(story_url)
+        story_data = story_response.json()
+        print(f"{story_data['title']} - {story_data['url']}")
+
+if __name__ == "__main__":
+    get_top_news()
+
+#2.Pokemon API'den Pokemon Bilgilerini Çekme:
+import requests
+
+def get_pokemon_info(pokemon_name):
+    url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name.lower()}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        pokemon_data = response.json()
+        print(f"Pokemon Adı: {pokemon_data['name']}")
+        print(f"Tip: {pokemon_data['types'][0]['type']['name']}")
+        print(f"Yetenek: {pokemon_data['abilities'][0]['ability']['name']}")
+    else:
+        print("Pokemon bulunamadı.")
+
+if __name__ == "__main__":
+    pokemon_name = input("Bilgi almak istediğiniz Pokemon'un adını girin: ")
+    get_pokemon_info(pokemon_name)
+#3. Open Weather Map'ten Hava Durumu Bilgilerini Çekme:
+import requests
+
+def get_weather(city_name):
+    api_key = "YOUR_OPENWEATHERMAP_API_KEY"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        weather_data = response.json()
+        temperature = weather_data['main']['temp'] - 273.15  # Kelvin'i Celsius'a çevir
+        description = weather_data['weather'][0]['description']
+        print(f"Hava Durumu: {description.capitalize()}")
+        print(f"Sıcaklık: {temperature:.2f}°C")
+    else:
+        print("Hava durumu bilgileri alınamadı.")
+
+if __name__ == "__main__":
+    city_name = input("Hava durumu bilgilerini almak istediğiniz şehri girin: ")
+    get_weather(city_name)
+
+
+
+
